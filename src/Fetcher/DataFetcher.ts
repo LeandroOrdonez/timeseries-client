@@ -119,8 +119,10 @@ export default class DataFetcher {
                 if (this.currentDate < this.endDate) {
                     this.currentDate = new Date(response.next);
                     console.log("next");
-                    console.log(urlParser.parse(response.previous).query);
-                    console.log(urlParser.parse(response.previous).query.page);
+                    console.log("response:", JSON.stringify(response));
+                    // console.log("response.previous:", JSON.stringify(response.previous));
+                    // console.log(urlParser.parse(response.previous).query);
+                    // console.log(urlParser.parse(response.previous).query.page);
                     this.getObservationsRecursive(tiles, polygonUtils, aggrMethod, aggrPeriod);
                     return;
                 }
