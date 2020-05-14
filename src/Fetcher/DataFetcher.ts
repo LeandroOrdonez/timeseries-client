@@ -9,10 +9,10 @@ const moment = require("moment");
 // tslint:disable-next-line:no-var-requires
 const UriTemplate = require("uritemplate");
 // tslint:disable-next-line:no-var-requires
-const https = require("follow-redirects").https;
+const http = require("follow-redirects").http;
 // tslint:disable-next-line:no-var-requires
 const CacheableRequest = require("cacheable-request");
-let cacheableRequest = new CacheableRequest(https.request);
+let cacheableRequest = new CacheableRequest(http.request);
 // tslint:disable-next-line:no-var-requires
 const urlParser = require("url");
 
@@ -113,14 +113,14 @@ export default class DataFetcher {
         aggrPeriod?: string) {
         await this.getTilesDataFragmentsTemporal(tiles, polygonUtils, aggrMethod, aggrPeriod)
             .then((response) => {
-                // console.log("[LOG] response after temporal: " + response);
-                // console.log("current date: " + this.currentDate);
-                // console.log("fromDate: " + this.startDate);
+                console.log("[LOG] response after temporal: " + JSON.stringify(response));
+                console.log("current date: " + this.currentDate);
+                console.log("fromDate: " + this.startDate);
                 if (this.currentDate < this.endDate) {
-                    // this.currentDate = new Date(response.next);
-                    // console.log("next");
-                    // console.log(urlParser.parse(response.previous).query);
-                    // console.log(urlParser.parse(response.previous).query.page);
+                    this.currentDate = new Date(response.next);
+                    console.log("next");
+                    console.log(urlParser.parse(response.previous).query);
+                    console.log(urlParser.parse(response.previous).query.page);
                     this.getObservationsRecursive(tiles, polygonUtils, aggrMethod, aggrPeriod);
                     return;
                 }
@@ -317,7 +317,7 @@ export default class DataFetcher {
                 params.aggrPeriod = aggrPeriod;
             }
             const url = this.urlTemplate.expand(params).replace(/%3A/g, ":");
-            // console.log(url);
+            console.log(`getTilesDataFragmentsSpatial url: ${url}`);
             response = await this.getDataFragment(url);
             fragmentStart = response.startDate;
             fragmentEnd = response.endDate;
@@ -643,7 +643,7 @@ export default class DataFetcher {
     }
 
     public clearCache() {
-        cacheableRequest = new CacheableRequest(https.request);
+        cacheableRequest = new CacheableRequest(http.request);
     }
 
     private calculateSummaries(metric: string, aggrMethod: string, aggrPeriod: string) {

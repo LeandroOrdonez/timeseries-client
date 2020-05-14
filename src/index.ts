@@ -7,7 +7,7 @@ export { default as DataFetcher} from "./Fetcher/DataFetcher";
 export { default as Observation} from "./DataTypes/Observation";
 export { default as Utils} from "./Polygon/Utils";
 
-if (!process.env.BASEURL) { process.env.BASEURL = "https://lodi.ilabt.imec.be/air/data/14"; }
+if (!process.env.BASEURL) { process.env.BASEURL = "http://10.10.137.122:30070/data/14"; }
 
 export default {
     DataFetcher,
