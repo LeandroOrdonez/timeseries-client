@@ -113,13 +113,13 @@ export default class DataFetcher {
         aggrPeriod?: string) {
         await this.getTilesDataFragmentsTemporal(tiles, polygonUtils, aggrMethod, aggrPeriod)
             .then((response) => {
-                console.log("[LOG] response after temporal: " + JSON.stringify(response));
-                console.log("current date: " + this.currentDate);
-                console.log("fromDate: " + this.startDate);
+                // console.log("[LOG] response after temporal: " + JSON.stringify(response));
+                // console.log("current date: " + this.currentDate);
+                // console.log("fromDate: " + this.startDate);
                 if (this.currentDate < this.endDate) {
                     this.currentDate = new Date(response.next);
-                    console.log("next");
-                    console.log("response:", JSON.stringify(response));
+                    // console.log("next");
+                    // console.log("response:", JSON.stringify(response));
                     // console.log("response.previous:", JSON.stringify(response.previous));
                     // console.log(urlParser.parse(response.previous).query);
                     // console.log(urlParser.parse(response.previous).query.page);
@@ -318,9 +318,9 @@ export default class DataFetcher {
                 }
                 params.aggrPeriod = aggrPeriod;
             }
-            console.log(`getTilesDataFragmentsSpatial this.urlTemplate: ${this.urlTemplate}`);
+            // console.log(`getTilesDataFragmentsSpatial this.urlTemplate: ${this.urlTemplate}`);
             const url = this.urlTemplate.expand(params).replace(/%3A/g, ":");
-            console.log(`getTilesDataFragmentsSpatial url: ${url}`);
+            // console.log(`getTilesDataFragmentsSpatial url: ${url}`);
             response = await this.getDataFragment(url);
             fragmentStart = response.startDate;
             fragmentEnd = response.endDate;
