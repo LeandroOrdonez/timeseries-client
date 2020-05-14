@@ -318,6 +318,7 @@ export default class DataFetcher {
                 }
                 params.aggrPeriod = aggrPeriod;
             }
+            console.log(`getTilesDataFragmentsSpatial this.urlTemplate: ${this.urlTemplate}`);
             const url = this.urlTemplate.expand(params).replace(/%3A/g, ":");
             console.log(`getTilesDataFragmentsSpatial url: ${url}`);
             response = await this.getDataFragment(url);
