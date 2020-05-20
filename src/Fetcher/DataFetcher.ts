@@ -9,10 +9,10 @@ const moment = require("moment");
 // tslint:disable-next-line:no-var-requires
 const UriTemplate = require("uritemplate");
 // tslint:disable-next-line:no-var-requires
-const https = require("follow-redirects").https;
+const http = require("follow-redirects").http;
 // tslint:disable-next-line:no-var-requires
 const CacheableRequest = require("cacheable-request");
-let cacheableRequest = new CacheableRequest(https.request);
+let cacheableRequest = new CacheableRequest(http.request);
 // tslint:disable-next-line:no-var-requires
 const urlParser = require("url");
 
@@ -643,7 +643,7 @@ export default class DataFetcher {
     }
 
     public clearCache() {
-        cacheableRequest = new CacheableRequest(https.request);
+        cacheableRequest = new CacheableRequest(http.request);
     }
 
     private calculateSummaries(metric: string, aggrMethod: string, aggrPeriod: string) {
