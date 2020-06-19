@@ -236,7 +236,7 @@ export default class DataFetcher {
                     if (new Date(phenomenonEnd).getTime() - new Date(phenomenonStart).getTime() === aggrInterval) {
                         mergedSummaries[key] = values;
                     } else {
-                        if (aggrMethod === "average") {
+                        if (aggrMethod === "avg") {
                             mergedSummaries[key] = [this.averagesTemporal(values)];
                         } else if (aggrMethod === "median") {
                             mergedSummaries[key] = [this.mediansTemporal(values)];
@@ -354,7 +354,7 @@ export default class DataFetcher {
      * @param aggrMethod: the method used to aggregate
      */
     public aggregatesSpatial(obs: Record<string, Observation[]>, aggrMethod: string): Record<string, Observation[]> {
-        if (aggrMethod === "average") {
+        if (aggrMethod === "avg") {
             const mergedAverages: Record<string, Observation[]> = {};
             Object.entries(obs).forEach(
                 ([key, values]) => mergedAverages[key] = this.averagesSpatial(values));
@@ -651,7 +651,7 @@ export default class DataFetcher {
 
     private calculateSummaries(metric: string, aggrMethod: string, aggrPeriod: string) {
         const aggrInterval = this.getAggrInterval(aggrPeriod);
-        if (aggrMethod === "average") {
+        if (aggrMethod === "avg") {
             return this.calculateAverages(this.observations[metric], aggrInterval, metric);
         } else if (aggrMethod === "median") {
             return this.calculateMedians(this.observations[metric], aggrInterval, metric);
@@ -767,7 +767,7 @@ export default class DataFetcher {
         // total count of observations between a time interval
         let count: number = 0;
         const tempSensors = new Set<string>();
-        const usedProcedure = "average";
+        const usedProcedure = "avg";
         for (const ob of obs) {
             if (new Date(ob.resultTime).getTime() <= nextAvg) {
                 tempTotal = tempTotal + Number(ob.hasSimpleResult);
