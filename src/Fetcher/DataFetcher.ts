@@ -46,8 +46,8 @@ export default class DataFetcher {
         const polygonUtils: PolygonUtils = new PolygonUtils(geometry);
         // console.log(geometry);
         const tiles: Tile[] = polygonUtils.calculateTilesWithinPolygon();
-        // console.log("request sent");
-        // console.log(tiles);
+        console.log("request sent");
+        console.log(tiles.map(tile => this.slippyToQuad(tile)).join(","));
         fromDate = this.dateOffsetCorrection(fromDate, aggrPeriod);
         toDate = this.dateOffsetCorrection(toDate, aggrPeriod);
         this.observations = {};
@@ -808,4 +808,21 @@ export default class DataFetcher {
         }
         return avgObservations;
     }
+
+    private slippyToQuad(tile: Tile) {
+        const quadKey = [];
+        for (let i = tile.zoom; i > 0; i--) {
+          let digit = 0;
+          let mask = 1 << (i - 1);
+          if ((tile.xTile & mask) !== 0) {
+            digit++;
+          }
+          if ((tile.yTile & mask) !== 0) {
+            digit++;
+            digit++;
+          }
+          quadKey.push(digit);
+        }
+        return quadKey.join("");
+      }
 }

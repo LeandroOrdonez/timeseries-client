@@ -8,8 +8,8 @@ const polygon = [{lat: 51.247948256199855, lng: 4.3948650278756585},
     {lat: 51.247946204391134, lng: 4.4163950267780425},
     {lat: 51.23452080628115, lng: 4.416370424386079},
     {lat: 51.23463220868682, lng: 4.394649463052668}];
-const fromDate = "2019-11-09T00:00:00.000Z";
-const toDate = "2019-11-16T00:00:00.000Z";
+const fromDate = "2018-08-01T00:00:00.000Z";
+const toDate = "2018-08-08T00:00:00.000Z";
 let summariesData = [];
 let summariesTimeStamps = [];
 let datafetcher = new DataFetcher();
@@ -28,7 +28,7 @@ function summariesWeekAvgMinData(method: CallableFunction) {
     summariesData = [];
     summariesTimeStamps = [];
     start = Date.now();
-    datafetcher.getPolygonObservations(polygon, fromDate, toDate, "average", "min");
+    datafetcher.getPolygonObservations(polygon, fromDate, toDate, "avg", "min");
 }
 
 function summariesWeekAvgHourData(method: CallableFunction) {
@@ -37,7 +37,7 @@ function summariesWeekAvgHourData(method: CallableFunction) {
     summariesData = [];
     summariesTimeStamps = [];
     start = Date.now();
-    datafetcher.getPolygonObservations(polygon, fromDate, toDate, "average", "hour");
+    datafetcher.getPolygonObservations(polygon, fromDate, toDate, "avg", "hour");
 }
 
 function summariesWeekAvgDayData(method: CallableFunction) {
@@ -46,7 +46,7 @@ function summariesWeekAvgDayData(method: CallableFunction) {
     summariesData = [];
     summariesTimeStamps = [];
     start = Date.now();
-    datafetcher.getPolygonObservations(polygon, fromDate, toDate, "average", "day");
+    datafetcher.getPolygonObservations(polygon, fromDate, toDate, "avg", "day");
 }
 
 function summariesWeekMedianMinData(method: CallableFunction) {
