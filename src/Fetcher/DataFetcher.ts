@@ -21,7 +21,7 @@ export default class DataFetcher {
     private baseUrl =  process.env.BASEURL;
     private observations: Record<string, Observation[]> = {};
     private fragEvent: FragmentEvent<object> = new FragmentEvent();
-    private urlTemplate = UriTemplate.parse(this.baseUrl + "/{x}/{y}{?page,aggrMethod,aggrPeriod}");
+    private urlTemplate = UriTemplate.parse(this.baseUrl + "/{z}/{x}/{y}{?page,aggrMethod,aggrPeriod}");
     private currentDate: Date = new Date();
     private startDate: Date = new Date();
     private endDate: Date = new Date();
@@ -308,6 +308,7 @@ export default class DataFetcher {
             const params: any = {};
             params.x = tile.xTile;
             params.y = tile.yTile;
+            params.z = tile.zoom;
             params.page = this.currentDate.toISOString();
             if (typeof aggrMethod !== "undefined") {
                 params.aggrMethod = aggrMethod;

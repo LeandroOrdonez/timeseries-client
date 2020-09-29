@@ -28,6 +28,7 @@
     "webpack-cli": "^3.3.9"
   },
   "dependencies": {
+    "@mapbox/tile-cover": "^3.0.2",
     "@turf/nearest-point-to-line": "^6.0.0",
     "@turf/point-to-line-distance": "^6.0.0",
     "@turf/turf": "^5.1.6",

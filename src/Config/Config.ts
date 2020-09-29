@@ -1,6 +1,7 @@
 export default abstract class Config {
     public static readonly context = {
-        zoom: 14,
+        zoomMin: 13,
+        zoomMax: 14,
         min: 60000,
         hour: 3600000,
         day: 86400000,

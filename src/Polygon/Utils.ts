@@ -1,4 +1,5 @@
 
+import tileCover = require("@mapbox/tile-cover");
 import { bboxPolygon, booleanContains, booleanDisjoint,
     degreesToRadians, Feature, intersect, point, Polygon, polygon, Position, union} from "@turf/turf";
 import globalMercator = require("global-mercator");
@@ -47,13 +48,22 @@ export default class PolygonUtils {
 
     public calculateTilesWithinPolygon(): Tile[] {
         const tiles: Tile[] = [];
-        this.calculateTileGridWithinPolygon().forEach((tileRow) => {
-            tileRow.forEach((tile) => {
-                if (tile instanceof Tile) {
-                    tiles.push(tile);
-                }
-            });
+        console.log(JSON.stringify(this.polygon));
+        console.log(tileCover.tiles(this.polygon.geometry, {
+            min_zoom: Config.context.zoomMin,
+            max_zoom: Config.context.zoomMax,
+        }));
+        tileCover.tiles(this.polygon.geometry, {min_zoom: Config.context.zoomMin, max_zoom: Config.context.zoomMax})
+        .forEach((tile) => {
+            tiles.push({xTile: tile[0], yTile: tile[1], zoom: tile[2]});
         });
+        // this.calculateTileGridWithinPolygon().forEach((tileRow) => {
+        //     tileRow.forEach((tile) => {
+        //         if (tile instanceof Tile) {
+        //             tiles.push(tile);
+        //         }
+        //     });
+        // });
         return tiles;
     }
 
@@ -64,9 +74,9 @@ export default class PolygonUtils {
     private createPolygon(coords: Array<{lat: number, lng: number}>): Feature<Polygon> {
         const turfCoords: Position[] = [];
         coords.forEach( (coord) => {
-            turfCoords.push([coord.lat, coord.lng]);
+            turfCoords.push([coord.lng, coord.lat]);
         });
-        turfCoords.push([coords[0].lat, coords[0].lng]);
+        turfCoords.push([coords[0].lng, coords[0].lat]);
         return polygon([turfCoords]);
     }
 
@@ -105,8 +115,8 @@ export default class PolygonUtils {
     }
 
     private calculateTilesWithinBBox(): ITilesBoundingBox {
-        const minTile = this.getTile(this.bbox.minLat, this.bbox.minLon, Config.context.zoom);
-        const maxTile = this.getTile(this.bbox.maxLat, this.bbox.maxLon, Config.context.zoom);
+        const minTile = this.getTile(this.bbox.minLat, this.bbox.minLon, Config.context.zoomMax);
+        const maxTile = this.getTile(this.bbox.maxLat, this.bbox.maxLon, Config.context.zoomMax);
 
         return {minTile, maxTile};
     }
@@ -176,7 +186,7 @@ export default class PolygonUtils {
                 const tile = tileGrid[i][j];
                 if (tile instanceof Tile) {
                     const bb = globalMercator.googleToBBox(
-                        [(tile as Tile).xTile, (tile as Tile).yTile, Config.context.zoom]);
+                        [(tile as Tile).xTile, (tile as Tile).yTile, Config.context.zoomMax]);
                     tilePolys[i][j] = bboxPolygon([bb[1], bb[0], bb[3], bb[2]]);
                 }
             }
@@ -198,7 +208,7 @@ export default class PolygonUtils {
         const offsetYtile = this.tBoundingBox.maxTile.yTile;
         for (let currX = this.tBoundingBox.minTile.xTile; currX <= this.tBoundingBox.maxTile.xTile; currX++) {
             for (let currY = this.tBoundingBox.maxTile.yTile; currY <= this.tBoundingBox.minTile.yTile; currY++) {
-                const bb = globalMercator.googleToBBox([currX, currY, Config.context.zoom]);
+                const bb = globalMercator.googleToBBox([currX, currY, Config.context.zoomMax]);
                 const bboxPoly: Feature<Polygon> = bboxPolygon([bb[1], bb[0], bb[3], bb[2]]);
                 // console.log("run");
                 // console.log(this.polygon);
@@ -206,7 +216,8 @@ export default class PolygonUtils {
                 // console.log(intersect(this.polygon, bboxPoly));
                 // console.log(booleanDisjoint(this.polygon, bboxPoly));
                 if (! booleanDisjoint(this.polygon, bboxPoly)) {
-                    tilePolys[currY - offsetYtile][currX - offsetXtile] = new Tile(currX, currY, Config.context.zoom);
+                    tilePolys[currY - offsetYtile][currX - offsetXtile] = new Tile(currX, currY,
+                        Config.context.zoomMax);
                 }
             }
         }
